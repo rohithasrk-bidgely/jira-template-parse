@@ -13,6 +13,8 @@ class Validation(object):
 
     def validate_configuration(self, description):
         schema_changes = description.get('Schema Changes', False)
+        if not schema_changes:
+            schema_changes = description.get('Config Changes', False)
         if not schema_changes or len(schema_changes) == 0: 
             raise ValueError("Schema Changes must be present")
 

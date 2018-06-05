@@ -1,4 +1,4 @@
-TYPE_OPTIONS = ['Configuration', 'Code Deployment']
+TYPE_OPTIONS = ['Configuration', 'Code Deployment', 'Configuration Change']
 
 SEQUENCE = {
     'Redshift Scripts': 1,

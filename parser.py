@@ -18,8 +18,10 @@ def parse(f):
             for j in range(1, l):
                 key_values[i][j] = key_values[i][j].split('\r\n')
                 n = len(key_values[i][j])
-                value_list = [x.split('* ')[1].strip() for x in key_values[i][j][1: n-2]]
-                local_dict[key_values[i][j][0].strip()] = value_list
+                if n>4:
+                    value_list = [x.split('* ')[1].strip() for x in key_values[i][j][1: n-2]]
+                    local_dict[key_values[i][j][0].strip()] = value_list
+                else: local_dict[key_values[i][j][0].strip()] = key_values[i][j][1].strip()
             result[key_values[i][0].split('\r\n')[0].strip()] = local_dict
         else:
             key_values[i] = key_values[i][0].split('\r\n')
