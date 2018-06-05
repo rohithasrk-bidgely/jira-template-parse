@@ -1,6 +1,8 @@
 import json
 import sys
 
+from validations import *
+
 def parse(f):
     data = json.loads(f)
     description = data.get('fields').get('description')
@@ -28,10 +30,12 @@ def parse(f):
             else: result[key_values[i][0].strip()] = key_values[i][1].strip()
     return result
 
-
+ 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print("Usage: ./parse.py <filepath>")
     else:
         f = open(sys.argv[1]).read()
-        print(json.dumps(parse(f)))
+        description = parse(f)
+        v = Validation()
+        v.validate(f, description)
