@@ -1,4 +1,4 @@
-from constants import TYPE_OPTIONS
+from constants import TYPE_OPTIONS, SEQUENCE, BACKEND_DEPLOYMENT, FRONTEND_DEPLOYMENT
 
 
 class Validation(object):
@@ -19,10 +19,14 @@ class Validation(object):
             raise ValueError("Schema Changes must be present")
 
     def validate_frontend(self, frontend):
-        pass
+        for i in frotend:
+            if not FRONTEND_DEPLOYMENT.get(i, False):
+                raise ValueError("Invalid frontend technology {}".format(i))
 
     def validate_backend(self, backend):
-        pass
+        for i in backend:
+            if not BACKEND_DEPLOYMENT.get(i, False):
+                raise ValueError("Invalid backend technology {}".format(i))
 
     def validate_code_deployment(self, description):
         frontend = description.get('Front End Deployment', False)
