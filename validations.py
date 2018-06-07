@@ -1,8 +1,14 @@
-from constants import TYPE_OPTIONS, SEQUENCE, BACKEND_DEPLOYMENT, FRONTEND_DEPLOYMENT
+from constants import (BACKEND_DEPLOYMENT, FRONTEND_DEPLOYMENT, SEQUENCE,
+                       TYPE_OPTIONS)
 
 
 class Validation(object):
-    def validate_type(self, issue_type):
+    """
+    Validation methods for the fields of a JIRA ticket
+    """
+
+    @staticmethod
+    def validate_type(issue_type):
         if(len(issue_type)) < 1:
             raise ValueError("Type is not specified")
         elif type(issue_type) == list:
@@ -11,24 +17,28 @@ class Validation(object):
                 if i in issue_type: n+=1
                 if n==0: raise ValueError("Invalid Type")
 
-    def validate_configuration(self, description):
+    @staticmethod
+    def validate_configuration(description):
         schema_changes = description.get('Schema Changes', False)
         if not schema_changes:
             schema_changes = description.get('Config Changes', False)
         if not schema_changes or len(schema_changes) == 0: 
             raise ValueError("Schema Changes must be present")
 
-    def validate_frontend(self, frontend):
+    @staticmethod
+    def validate_frontend(frontend):
         for i in frotend:
             if not FRONTEND_DEPLOYMENT.get(i, False):
                 raise ValueError("Invalid frontend technology {}".format(i))
 
-    def validate_backend(self, backend):
+    @staticmethod
+    def validate_backend(backend):
         for i in backend:
             if not BACKEND_DEPLOYMENT.get(i, False):
                 raise ValueError("Invalid backend technology {}".format(i))
 
-    def validate_code_deployment(self, description):
+    @staticmethod
+    def validate_code_deployment(description):
         frontend = description.get('Front End Deployment', False)
         backend = description.get('Backend Deployment', False)
         if not frontend and not backend:
@@ -36,7 +46,8 @@ class Validation(object):
         if frontend: validate_frontend(frontend)
         if backend: validate_backend(backend)
 
-    def validate_mandatory_fields(self, description):
+    @staticmethod
+    def validate_mandatory_fields(description):
         reason = description.get('Reason for change', False)
         build_version = description.get('Build Version', False)
         git_tag = description.get('Git Tag', False)
@@ -53,12 +64,22 @@ class Validation(object):
         if not build_versions or len(build_versions) == 0:
             raise ValueError("Build version is a mandatory field")
 
-    def validate(self, f, description):
+    @staticmethod
+    def validate(description):
         issue_type = description.get('Type')
-        self.validate_type(issue_type)
+        validate_type(issue_type)
         if 'Configuration' in issue_type:
-            self.validate_configuration(description)
+            validate_configuration(description)
         if 'Code deployment' in issue_type:
-            self.validate_code_deployment(description)
-        self.validate_mandatory_fields(description)
+            validate_code_deployment(description)
+        validate_mandatory_fields(description)
         print("Validated all the fields. Good to go!")
+
+
+validate_type = Validation.validate_type
+validate_configuration = Validation.validate_configuration
+validate_code_deployment = Validation.validate_code_deployment
+validate_mandatory_fields = Validation.validate_mandatory_fields
+validate_frontend = Validation.validate_frontend
+validate_backend = Validation.validate_backend
+validate = Validation.validate
