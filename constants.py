@@ -9,11 +9,11 @@ SEQUENCE = {
 }
 
 BUILD_VERSIONS = {
-    'Pingpong': 1,
-    'HAN NA Disagg': 2,
-    'GB Disagg': 3,
-    'HAN EU Disagg': 4,
-    'Hybird model version': 5,
+    'Pingpong': '3.1.',
+    'HAN NA Disagg': '1.0.',
+    'GB Disagg': '1.0.',
+    'HAN EU Disagg': '2.0.',
+    'Hybrid model version': '3.1.',
 }
 
 BACKEND_DEPLOYMENT = {
@@ -39,6 +39,8 @@ BACKEND_DEPLOYMENT = {
         'uploadSplitterServices': 20,
         'watchdog': 21,
         'geo-adapter': 22,
+        'HANDisagg-2': 23,
+        'HANDisagg-1': 24,
 }
 
 FRONTEND_DEPLOYMENT = {

@@ -1,5 +1,5 @@
 from constants import (BACKEND_DEPLOYMENT, FRONTEND_DEPLOYMENT, SEQUENCE,
-                       TYPE_OPTIONS)
+                       TYPE_OPTIONS, BUILD_VERSIONS)
 
 
 class Validation(object):
@@ -18,24 +18,38 @@ class Validation(object):
                 if n==0: raise ValueError("Invalid Type")
 
     @staticmethod
-    def validate_configuration(description):
-        schema_changes = description.get('Schema Changes', False)
-        if not schema_changes:
-            schema_changes = description.get('Config Changes', False)
-        if not schema_changes or len(schema_changes) == 0: 
-            raise ValueError("Schema Changes must be present")
-
-    @staticmethod
     def validate_frontend(frontend):
         for i in frotend:
             if not FRONTEND_DEPLOYMENT.get(i, False):
                 raise ValueError("Invalid frontend technology {}".format(i))
 
     @staticmethod
+    def validate_build_versions(build_versions):
+        for i in build_versions:
+            name, version = i.split(':')
+            if not version.strip().startswith(BUILD_VERSIONS[name.strip()]):
+                raise ValueError("Invalid version numbers")
+
+    @staticmethod
     def validate_backend(backend):
-        for i in backend:
-            if not BACKEND_DEPLOYMENT.get(i, False):
-                raise ValueError("Invalid backend technology {}".format(i))
+        build_versions = backend.get('Build Versions')
+        if not build_versions or len(build_versions) == 0:
+            raise ValueError("Build version is a mandatory field")
+        else: validate_build_versions(build_versions)
+        rpms = backend.get('RPMS')
+        schema_changes = backend.get('Schema Changes', False)
+        if not schema_changes or len(schema_changes) == 0:
+            raise ValueError("Schema Changes must be present")
+        for i in rpms:
+            for j in rpms[i]:
+                if not BACKEND_DEPLOYMENT.get(j, False):
+                    raise ValueError("Invalid backend technology {}".format(j))
+
+    @staticmethod
+    def validate_configuration(description):
+        backend = description.get('Backend Deployment', False)
+        if backend: validate_backend(backend)
+        else: raise ValueError("Backend section not found")
 
     @staticmethod
     def validate_code_deployment(description):
@@ -55,14 +69,6 @@ class Validation(object):
         build_versions = description.get('Build Versions', False)
         if not reason or len(reason) == 0:
             raise ValueError("Reason is a mandatory field")
-        if not build_version or len(build_version) == 0:
-            raise ValueError("Build version is a mandatory field")
-        if not git_tag or len(git_tag) == 0:
-            raise ValueError("Git tag is a mandatory field")
-        if not sequence or len(sequence) == 0:
-            raise ValueError("Sequence is a mandatory field")
-        if not build_versions or len(build_versions) == 0:
-            raise ValueError("Build version is a mandatory field")
 
     @staticmethod
     def validate(description):
@@ -77,9 +83,9 @@ class Validation(object):
 
 
 validate_type = Validation.validate_type
-validate_configuration = Validation.validate_configuration
 validate_code_deployment = Validation.validate_code_deployment
 validate_mandatory_fields = Validation.validate_mandatory_fields
 validate_frontend = Validation.validate_frontend
+validate_build_versions = Validation.validate_build_versions
 validate_backend = Validation.validate_backend
-validate = Validation.validate
+validate_configuration = Validation.validate_configuration

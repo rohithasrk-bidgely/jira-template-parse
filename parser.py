@@ -24,7 +24,7 @@ def parse(f):
                     for k in range(1, l):
                         key_values[i][j][k] = key_values[i][j][k].split('\r\n')
                         n = len(key_values[i][j][k])
-                        if n>4:
+                        if n>=4:
                             value_list = [x.split('* ')[1].strip() for x in key_values[i][j][k][1: n-2]]
                             local_dict[key_values[i][j][k][0].strip()] = value_list
                         else: local_dict[key_values[i][j][k][0].strip()] = key_values[i][j][k][1].strip()
@@ -32,7 +32,7 @@ def parse(f):
                 else:
                     key_values[i][j] = key_values[i][j][0].split('\r\n')
                     n = len(key_values[i][j])
-                    if n>4:
+                    if n>=4:
                         value_list = [x.split('* ')[1].strip() for x in key_values[i][j][1: n-2]]
                         desc_local[key_values[i][j][0].strip()] = value_list
                     else: desc_local[key_values[i][j][0].strip()] = key_values[i][j][1].strip()

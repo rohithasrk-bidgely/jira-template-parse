@@ -1,7 +1,7 @@
 #
 #   Usage: python validate_pcr_ticket.py <JIRA login username> <API key> <ticket id>
 #
-
+import sys
 from parser import *
 
 import requests
@@ -19,4 +19,8 @@ if __name__ == "__main__":
         raise TypeError("Usage: python validate_pcr_ticket.py <JIRA login email> <API key> <ticket id>")
     login_id, api_key, ticket_id = sys.argv[1:]
     api_url = "https://bidgely.atlassian.net/rest/api/2/issue/{}".format(ticket_id)
-    validate_pcr(api_url, login_id, api_key)
+    try:
+        validate_pcr(api_url, login_id, api_key)
+    except ValueError as e:
+        sys.stdout.write(str(e))
+        sys.exit(1)
