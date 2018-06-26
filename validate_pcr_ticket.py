@@ -10,6 +10,9 @@ from requests.auth import HTTPBasicAuth
 
 def validate_pcr(api_url, login_id, api_key):
     response = requests.get(api_url, auth=HTTPBasicAuth(login_id, api_key))
+    if 'preprod' in response.text.lower():
+        sys.stdout.write("Prod PCR has a term Pre prod in it. Please check and update.\n")
+        sys.exit(1)
     description = parse(response.text)
     Validation.validate(description)
 

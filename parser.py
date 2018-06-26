@@ -40,7 +40,7 @@ def parse(f):
         else:
             key_values[i][0] = key_values[i][0][0].split('\r\n')
             n = len(key_values[i][0])
-            if n>4:
+            if n>4 and key_values[i][0][0].strip().lower()!='special instructions':
                 value_list = [x.split('* ')[1].strip() for x in key_values[i][0][1: n-2]]
                 description[key_values[i][0][0].strip()] = value_list
             else: description[key_values[i][0][0].strip()] = key_values[i][0][1].strip()
