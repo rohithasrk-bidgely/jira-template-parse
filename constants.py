@@ -41,6 +41,7 @@ BACKEND_DEPLOYMENT = {
         'geo-adapter': 22,
         'HANDisagg-2': 23,
         'HANDisagg-1': 24,
+        'notificationsprocessorservice': 25,
 }
 
 FRONTEND_DEPLOYMENT = {
