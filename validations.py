@@ -71,6 +71,13 @@ class Validation(object):
             raise ValueError("Reason is a mandatory field")
 
     @staticmethod
+    def validate_approver_and_reviewer(description):
+        approver = description.get('Approver', False)
+        reviewer = description.get('Reviewer', False)
+        if approver=='' or reviewer=='' or reviewer=="----":
+            raise ValueError("Approver or Reviewer field not filled")
+
+    @staticmethod
     def validate(description):
         issue_type = description.get('Type')
         validate_type(issue_type)
@@ -79,6 +86,7 @@ class Validation(object):
         if 'Code deployment' in issue_type:
             validate_code_deployment(description)
         validate_mandatory_fields(description)
+        Validation.validate_approver_and_reviewer(description)
         print("Validated all the fields. Good to go!")
 
 
