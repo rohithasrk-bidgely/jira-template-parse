@@ -26,7 +26,9 @@ if __name__ == "__main__":
     api_url = "https://bidgely.atlassian.net/rest/api/2/issue/{}".format(ticket_id)
     try:
         validate_pcr(api_url, login_id, api_key, env)
-    except ValueError as e:
+    except (ValueError, IndexError) as e:
+        if(type(e) == IndexError):
+            sys.stdout.write("Check the template format. Also for missing spaces and linebreaks.\n")
         sys.stdout.write(str(e))
         sys.stdout.write("\n")
         sys.exit(1)
